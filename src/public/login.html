@@ -1,0 +1,23 @@
+<!-- <Jakub Śledzikowski | jsledzikowski.web@gmail.com | jsle.eu | MIT> -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PHPilot — log in</title>
+<meta name="theme-color" content="#2C2C2A">
+<meta name="color-scheme" content="dark">
+<link rel="stylesheet" href="@@ASSET_BASE@@/style.css?v=@@ASSET_VERSION@@">
+</head>
+<body class="login-page">
+<main class="card">
+ <h1><span>PHPilot</span> — log in</h1>
+ @@LOGIN_ERROR@@
+ <form method="post" action="?action=login">
+  <label class="label" for="pw">Password</label>
+  <input id="pw" type="password" name="password" required autofocus autocomplete="current-password">
+  <button type="submit">Log in</button>
+ </form>
+</main>
+</body>
+</html>

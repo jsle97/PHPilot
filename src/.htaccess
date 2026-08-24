@@ -1,0 +1,12 @@
+<FilesMatch "^(config\.json|tools\.json|system_prompt\.md|\.env)$">
+ Require all denied
+</FilesMatch>
+
+<IfModule mod_rewrite.c>
+ RewriteEngine On
+ RewriteRule ^config/(?!install/index\.php$) - [F,L]
+</IfModule>
+
+<Files ".htaccess">
+ Require all denied
+</Files>

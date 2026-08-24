@@ -1,0 +1,122 @@
+<!-- <Jakub Śledzikowski | jsledzikowski.web@gmail.com | jsle.eu | MIT> -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,interactive-widget=resizes-content">
+<title>PHPilot — agent</title>
+<meta name="theme-color" content="#141413">
+<meta name="color-scheme" content="dark">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="PHPilot">
+<link rel="manifest" href="?action=manifest">
+<link rel="icon" href="?action=icon&amp;size=48">
+<link rel="apple-touch-icon" href="?action=icon&amp;size=180">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="@@ASSET_BASE@@/style.css?v=@@ASSET_VERSION@@">
+</head>
+<body data-csrf="@@PHPILOT_CSRF@@">
+
+<div class="bar">
+ <h1 class="mark">PHPilot</h1>
+ <div class="bar-scroll">
+
+ <div class="field">
+  <label for="sp">project</label>
+  <select id="sp"></select>
+ </div>
+
+ <input id="inp" class="text-input" style="width:120px" placeholder="new…" aria-label="New project name">
+ <button class="btn" id="bc" title="Create project">+</button>
+ <button class="btn" id="bf" title="Open folder from server">folder</button>
+ <button class="btn btn-danger" id="bd" title="Delete project">delete</button>
+ <button class="btn" id="bk" title="Clear conversation history">clear chat</button>
+ <a class="btn" href="?action=logout" title="Log out" style="text-decoration:none;color:var(--t2)">log out</a>
+
+ <div class="spacer"></div>
+
+ <div class="field">
+  <label for="sm">model</label>
+  <select id="sm"></select>
+ </div>
+ <div class="divider"></div>
+ <div class="field">
+  <label for="st">thinking</label>
+  <select id="st">
+   <option value="off">off</option>
+   <option value="low">low</option>
+   <option value="high">high</option>
+   <option value="max">maximum</option>
+  </select>
+ </div>
+ <button type="button" class="btn" id="bo" title="Current conversation options" aria-controls="om">options</button>
+ </div>
+</div>
+
+<div class="ctx">
+ <button class="btn files-toggle" id="bt" title="Show files" aria-controls="side" aria-expanded="false">files</button>
+ <span class="ctx-path" id="cpath">—</span>
+ <span class="ctx-sep" id="csep" hidden>·</span>
+ <a class="ctx-url" id="curl" target="_blank" rel="noopener" hidden></a>
+</div>
+
+<main class="main">
+ <div class="backdrop" id="backdrop"></div>
+ <aside class="side" id="side" aria-label="Project files" aria-hidden="false">
+  <div class="side-head"><span>files</span><span class="side-count" id="fcount"></span><button class="icon-btn side-close" id="sideclose" type="button" title="Close files" aria-label="Close files">✕</button></div>
+  <div class="tree" id="ft"></div>
+ </aside>
+
+ <div class="chat">
+  <div class="log" id="log"><div class="log-inner" id="loginner"></div></div>
+  <div class="composer">
+   <div class="composer-inner">
+    <div class="composer-input">
+     <div class="image-tray" id="image-tray" hidden></div>
+     <textarea id="ti" rows="1" placeholder="Describe what the agent should do…"></textarea>
+    </div>
+    <input id="image-input" type="file" accept="image/jpeg,image/png,image/gif,image/webp" multiple hidden>
+    <button class="send send-attach" id="bimage" type="button" title="Attach up to two images">image</button>
+    <button class="send" id="bs">send</button>
+    <button class="send send-stop" id="bstop" hidden>stop</button>
+   </div>
+  </div>
+ </div>
+</main>
+
+<div class="modal" id="om" role="dialog" aria-modal="true" aria-labelledby="omtitle" aria-hidden="true">
+ <div class="modal-box modal-box-sm">
+  <div class="modal-head"><h2 class="modal-title" id="omtitle">conversation options</h2><button class="icon-btn" id="omclose" title="Close">✕</button></div>
+  <div class="modal-body options-form">
+   <label for="omtools">max tools / round</label><input id="omtools" type="number" min="1" max="32" step="1">
+   <label for="omtokens">max response tokens</label><input id="omtokens" type="number" min="1" max="32768" step="1">
+   <label for="omtemp">temperature (0–2, optional)</label><input id="omtemp" type="number" min="0" max="2" step="0.1" placeholder="model default">
+   <label for="ominstr">additional system prompt instructions</label><textarea id="ominstr" rows="6" maxlength="8000" placeholder="E.g. respond in English and propose a plan first."></textarea>
+  </div>
+  <div class="modal-foot"><button type="button" class="btn" id="omsave">save options</button></div>
+ </div>
+</div>
+
+<div class="modal" id="mv" role="dialog" aria-modal="true" aria-labelledby="mp" aria-hidden="true">
+ <div class="modal-box">
+  <div class="modal-head"><span id="mp"></span><div class="modal-actions"><button class="btn" id="me" type="button">edit</button><button class="icon-btn" id="mc" title="Close">✕</button></div></div>
+  <div class="modal-body"><pre id="mx"></pre><textarea id="meditor" class="file-editor" spellcheck="false" hidden></textarea></div>
+  <div class="modal-foot" id="mfoot" hidden><button type="button" class="btn" id="msave">save file</button></div>
+ </div>
+</div>
+
+<div class="modal" id="fb" role="dialog" aria-modal="true" aria-labelledby="fbpath" aria-hidden="true">
+ <div class="modal-box modal-box-sm">
+  <div class="modal-head"><span id="fbpath">public_html</span><button class="icon-btn" id="fbclose" title="Close">✕</button></div>
+  <div class="modal-body" style="padding:0"><div class="pick-list" id="fblist"></div></div>
+  <div class="modal-foot"><button class="btn" id="fbopen">open this folder</button></div>
+ </div>
+</div>
+
+<script src="@@ASSET_BASE@@/app.js?v=@@ASSET_VERSION@@" defer></script>
+</body>
+</html>
