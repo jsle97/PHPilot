@@ -1,6 +1,6 @@
 # PHPilot
 
-**Edit websites on ordinary PHP hosting with an AI coding agent — directly where they already live.**
+**Edit websites on ordinary PHP hosting with an AI coding agent - directly where they already live.**
 
 Upload PHPilot once, open it in your browser, select an existing website and describe what you want changed.
 
